@@ -10,19 +10,47 @@
   --color-parchment-dark: #e8d7b3;
   --color-ink: #1e130c;
   --color-ink-faded: #4a3629;
+  --color-bg-dark: #0f0a07;
+  --color-bg-mid: #1a130f;
   --theme-primary: #740001;
   --theme-secondary: #ae0001;
   --theme-accent: #eeb939;
   --theme-accent-rgb: 238, 185, 57;
   --theme-bg-glow: rgba(116, 0, 1, 0.15);
+  --text-main: #f7edd2;
+  --text-soft: #decba4;
+  --text-muted: #b79f7a;
+  --panel-dark: #241a13;
+  --panel-darker: #1a120d;
+  --edge-glow: rgba(238, 185, 57, 0.18);
 }
 
 body {
-  background-color: var(--color-parchment);
-  color: var(--color-ink);
+  background:
+    radial-gradient(circle at 20% 15%, rgba(var(--theme-accent-rgb), 0.08), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(116, 0, 1, 0.2), transparent 40%),
+    linear-gradient(160deg, var(--color-bg-dark), var(--color-bg-mid) 55%, #120c09);
+  color: var(--text-main);
   cursor: none;
   overflow-x: hidden;
   transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+a { color: var(--theme-accent); }
+a:hover { color: #ffe8a3; }
+
+h1, h2, h3 {
+  color: #ffedbe;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.65), 0 0 12px rgba(var(--theme-accent-rgb), 0.18);
+}
+
+header h1 {
+  color: #ffeab2 !important;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.85), 0 0 16px rgba(var(--theme-accent-rgb), 0.28);
+}
+
+header p {
+  color: #f2dec0 !important;
 }
 
 .parchment-overlay {
@@ -32,7 +60,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-image:
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.07) 100%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
@@ -60,12 +88,13 @@ body {
 }
 
 .pixel-border {
-  border: 4px solid var(--color-ink);
+  border: 4px solid var(--panel-dark);
   box-shadow:
-    0 4px 0 -2px var(--color-ink),
-    0 -4px 0 -2px var(--color-ink),
-    4px 0 0 -2px var(--color-ink),
-    -4px 0 0 -2px var(--color-ink);
+    0 4px 0 -2px var(--panel-dark),
+    0 -4px 0 -2px var(--panel-dark),
+    4px 0 0 -2px var(--panel-dark),
+    -4px 0 0 -2px var(--panel-dark),
+    0 0 24px var(--edge-glow);
 }
 
 .pixel-border-interactive {
@@ -81,11 +110,84 @@ body {
   border-color: var(--theme-primary);
 }
 
-.house-text-primary { color: var(--theme-primary); }
+.house-text-primary { color: var(--theme-accent); }
 .house-text-accent { color: var(--theme-accent); }
 .house-bg-primary { background-color: var(--theme-primary); }
 .house-bg-accent { background-color: var(--theme-accent); }
 .house-border-theme { border-color: var(--theme-primary); }
+
+.text-stone-900,
+.text-black { color: var(--text-main) !important; }
+
+.text-stone-800,
+.text-stone-700,
+.text-stone-600 { color: var(--text-soft) !important; }
+
+.text-stone-500,
+.text-stone-400 { color: var(--text-muted) !important; }
+
+.bg-\[\#e8d7b3\],
+.bg-\[\#e5cf9c\],
+.bg-\[\#ebdcb9\],
+.bg-\[\#f5ebd0\] {
+  background-color: rgba(36, 26, 19, 0.92) !important;
+}
+
+.bg-stone-900 {
+  background-color: rgba(12, 9, 7, 0.96) !important;
+}
+
+.bg-stone-800 {
+  background-color: rgba(28, 20, 14, 0.96) !important;
+}
+
+.bg-green-800 {
+  background-color: #2d6c4b !important;
+}
+
+.bg-green-700 {
+  background-color: #3b8760 !important;
+}
+
+.bg-amber-100 {
+  background-color: rgba(55, 39, 27, 0.95) !important;
+}
+
+.border-stone-800,
+.border-stone-700,
+.border-stone-600,
+.border-stone-500,
+.border-stone-400 {
+  border-color: rgba(233, 203, 150, 0.28) !important;
+}
+
+.bg-black.bg-opacity-40 {
+  background-color: rgba(10, 8, 6, 0.72) !important;
+}
+
+.text-yellow-100 {
+  color: #fff0c4 !important;
+}
+
+.text-yellow-300 {
+  color: #ffdf8a !important;
+}
+
+.hover\:bg-white:hover {
+  background-color: rgba(62, 45, 32, 0.95) !important;
+}
+
+.hover\:bg-stone-800:hover {
+  background-color: rgba(44, 31, 21, 0.98) !important;
+}
+
+.hover\:bg-stone-700:hover {
+  background-color: rgba(58, 40, 27, 0.98) !important;
+}
+
+.hover\:text-amber-800:hover {
+  color: #ffd47a !important;
+}
 
 @keyframes float {
   0% { transform: translateY(0px); }
@@ -112,10 +214,43 @@ body {
   100% { background-color: transparent; }
 }
 
-.lumos-active { filter: invert(1) hue-rotate(180deg); }
-.lumos-active #wand-canvas,
+/* Lumos uses a true light palette (no full-page invert) */
+.lumos-active {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(var(--theme-accent-rgb), 0.14), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(116, 0, 1, 0.1), transparent 40%),
+    linear-gradient(160deg, #f7ecd1, #eadbb8 60%, #dfcca5) !important;
+  color: #24160f !important;
+}
+
 .lumos-active .parchment-overlay {
-  filter: invert(1) hue-rotate(180deg);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.28) 0%, rgba(0,0,0,0.05) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+.lumos-active h1,
+.lumos-active h2,
+.lumos-active h3 {
+  color: #472515 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 8px rgba(116, 0, 1, 0.15);
+}
+
+.lumos-active header p,
+.lumos-active .text-stone-800,
+.lumos-active .text-stone-700,
+.lumos-active .text-stone-600,
+.lumos-active .text-stone-500,
+.lumos-active .text-stone-400 {
+  color: #4b3427 !important;
+}
+
+.lumos-active .bg-\[\#e8d7b3\],
+.lumos-active .bg-\[\#e5cf9c\],
+.lumos-active .bg-\[\#ebdcb9\],
+.lumos-active .bg-\[\#f5ebd0\],
+.lumos-active .bg-amber-100 {
+  background-color: rgba(244, 231, 202, 0.95) !important;
 }
 
 .github-avatar.hidden,
