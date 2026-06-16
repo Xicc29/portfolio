@@ -1,0 +1,9 @@
+{
+  "name": "harry-potter-portfolio",
+  "version": "1.0.0",
+  "description": "A Harry Potter retro-themed developer portfolio",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}

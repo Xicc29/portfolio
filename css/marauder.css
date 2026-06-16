@@ -1,0 +1,145 @@
+/* Marauder's Retro Portfolio — custom styles */
+
+.font-pixel { font-family: 'Press Start 2P', monospace; }
+.font-retro-terminal { font-family: 'VT323', monospace; }
+.font-magic-title { font-family: 'Cinzel Decorative', serif; }
+.font-vintage { font-family: 'IM Fell English SC', serif; }
+
+:root {
+  --color-parchment: #f5ebd0;
+  --color-parchment-dark: #e8d7b3;
+  --color-ink: #1e130c;
+  --color-ink-faded: #4a3629;
+  --theme-primary: #740001;
+  --theme-secondary: #ae0001;
+  --theme-accent: #eeb939;
+  --theme-accent-rgb: 238, 185, 57;
+  --theme-bg-glow: rgba(116, 0, 1, 0.15);
+}
+
+body {
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  cursor: none;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.parchment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.07) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.crt::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 10;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+#wand-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.pixel-border {
+  border: 4px solid var(--color-ink);
+  box-shadow:
+    0 4px 0 -2px var(--color-ink),
+    0 -4px 0 -2px var(--color-ink),
+    4px 0 0 -2px var(--color-ink),
+    -4px 0 0 -2px var(--color-ink);
+}
+
+.pixel-border-interactive {
+  transition: all 0.2s ease;
+}
+.pixel-border-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 0 -2px var(--theme-primary),
+    0 -4px 0 -2px var(--theme-primary),
+    4px 0 0 -2px var(--theme-primary),
+    -4px 0 0 -2px var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+.house-text-primary { color: var(--theme-primary); }
+.house-text-accent { color: var(--theme-accent); }
+.house-bg-primary { background-color: var(--theme-primary); }
+.house-bg-accent { background-color: var(--theme-accent); }
+.house-border-theme { border-color: var(--theme-primary); }
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+@keyframes magicGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(var(--theme-accent-rgb), 0.4); }
+  50% { box-shadow: 0 0 25px rgba(var(--theme-accent-rgb), 0.8); }
+}
+.magical-glow { animation: magicGlow 3s infinite; }
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+.scanline-effect { animation: scanline 8s linear infinite; }
+
+.spell-flash { animation: flashAnimation 0.6s ease-out forwards; }
+@keyframes flashAnimation {
+  0% { background-color: rgba(var(--theme-accent-rgb), 0.9); filter: brightness(2); }
+  100% { background-color: transparent; }
+}
+
+.lumos-active { filter: invert(1) hue-rotate(180deg); }
+.lumos-active #wand-canvas,
+.lumos-active .parchment-overlay {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.github-avatar.hidden,
+.hidden { display: none !important; }
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track {
+  background: var(--color-parchment-dark);
+  border-left: 4px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-primary);
+  border: 2px solid var(--color-parchment-dark);
+}
+
+@media (pointer: coarse) {
+  body { cursor: auto; }
+  #wand-canvas { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
