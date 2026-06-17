@@ -1,4 +1,4 @@
-/* Marauder's Retro Portfolio — custom styles */
+/* Retro Racing Portfolio — custom styles */
 
 .font-pixel { font-family: 'Press Start 2P', monospace; }
 .font-retro-terminal { font-family: 'VT323', monospace; }
@@ -7,29 +7,29 @@
 
 :root {
   --color-parchment: #f5ebd0;
-  --color-parchment-dark: #e8d7b3;
+  --color-parchment-dark: #d9c9a2;
   --color-ink: #1e130c;
-  --color-ink-faded: #4a3629;
-  --color-bg-dark: #0f0a07;
-  --color-bg-mid: #1a130f;
-  --theme-primary: #740001;
-  --theme-secondary: #ae0001;
-  --theme-accent: #eeb939;
-  --theme-accent-rgb: 238, 185, 57;
-  --theme-bg-glow: rgba(116, 0, 1, 0.15);
-  --text-main: #f7edd2;
-  --text-soft: #decba4;
-  --text-muted: #b79f7a;
-  --panel-dark: #241a13;
-  --panel-darker: #1a120d;
-  --edge-glow: rgba(238, 185, 57, 0.18);
+  --color-ink-faded: #564639;
+  --color-bg-dark: #111317;
+  --color-bg-mid: #1a1f27;
+  --theme-primary: #c62828;
+  --theme-secondary: #ef5350;
+  --theme-accent: #ffd166;
+  --theme-accent-rgb: 255, 209, 102;
+  --theme-bg-glow: rgba(198, 40, 40, 0.15);
+  --text-main: #fff3d0;
+  --text-soft: #e2cfaa;
+  --text-muted: #b8a384;
+  --panel-dark: #21262d;
+  --panel-darker: #161b22;
+  --edge-glow: rgba(255, 209, 102, 0.24);
 }
 
 body {
   background:
     radial-gradient(circle at 20% 15%, rgba(var(--theme-accent-rgb), 0.08), transparent 35%),
-    radial-gradient(circle at 80% 10%, rgba(116, 0, 1, 0.2), transparent 40%),
-    linear-gradient(160deg, var(--color-bg-dark), var(--color-bg-mid) 55%, #120c09);
+    radial-gradient(circle at 80% 10%, rgba(198, 40, 40, 0.2), transparent 40%),
+    linear-gradient(160deg, var(--color-bg-dark), var(--color-bg-mid) 55%, #0b0f15);
   color: var(--text-main);
   cursor: none;
   overflow-x: hidden;
@@ -60,10 +60,25 @@ header p {
   width: 100vw;
   height: 100vh;
   background-image:
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.3) 100%),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
+}
+
+header::after {
+  content: "";
+  display: block;
+  height: 8px;
+  margin-top: 1rem;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f7f7f7 0 16px,
+      #111 16px 32px
+    );
+  border: 2px solid var(--panel-dark);
+  box-shadow: 0 0 0 2px rgba(255, 209, 102, 0.2) inset;
 }
 
 .crt::after {
@@ -142,11 +157,11 @@ header p {
 }
 
 .bg-green-800 {
-  background-color: #2d6c4b !important;
+  background-color: #355c7d !important;
 }
 
 .bg-green-700 {
-  background-color: #3b8760 !important;
+  background-color: #4372a1 !important;
 }
 
 .bg-amber-100 {
@@ -186,7 +201,7 @@ header p {
 }
 
 .hover\:text-amber-800:hover {
-  color: #ffd47a !important;
+  color: #ffe29a !important;
 }
 
 @keyframes float {
