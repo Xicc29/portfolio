@@ -12,7 +12,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/garage.css">
 </head>
-<body class="selection:bg-amber-400 selection:text-black min-h-screen relative flex flex-col justify-between overflow-x-hidden pb-10">
+<body class="selection:bg-amber-400 selection:text-black min-h-screen relative flex flex-col justify-between overflow-x-hidden pb-10 is-loading">
+
+    <div id="garage-loader" class="garage-loader" role="status" aria-live="polite" aria-label="Loading portfolio">
+        <div class="garage-loader-door garage-loader-door--top" aria-hidden="true"></div>
+        <div class="garage-loader-door garage-loader-door--bottom" aria-hidden="true"></div>
+        <div class="garage-loader-panel">
+            <div class="garage-loader-checkered" aria-hidden="true"></div>
+            <p class="font-pixel text-[9px] text-amber-400 tracking-widest mb-2">PIT CREW SYSTEM BOOT v2.6</p>
+            <h2 class="font-cartoon text-3xl md:text-5xl text-white drop-shadow-[4px_4px_0_#000] mb-1">
+                LEGASPI <span class="theme-text-primary">GARAGE</span>
+            </h2>
+            <p class="font-pixel text-[8px] text-stone-500 mb-4">@Xicc29 · Retro Speedway Edition</p>
+            <p id="garage-loader-quote" class="garage-loader-quote font-pixel text-[10px] md:text-xs text-amber-400 leading-relaxed mb-5">
+                "You think you can beat me?<br><span class="garage-loader-kachow theme-text-primary">KACHOW!</span>"
+            </p>
+            <div class="garage-loader-car animate-engine-idle" aria-hidden="true">🏎️</div>
+            <div class="garage-loader-bar" aria-hidden="true">
+                <div id="garage-loader-fill" class="garage-loader-fill"></div>
+            </div>
+            <p id="garage-loader-pct" class="font-pixel text-sm text-amber-400 mt-3">0%</p>
+            <p id="garage-loader-status" class="font-pixel text-[9px] text-stone-400 mt-2 min-h-[2.5em]">Cranking the starter motor...</p>
+        </div>
+    </div>
 
     <div class="fixed inset-0 pointer-events-none z-0 opacity-10 tire-tracks"></div>
     <canvas id="exhaust-canvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
@@ -56,8 +78,9 @@
             </h1>
 
             <p class="font-pixel text-xs md:text-sm tracking-wide text-amber-400 mb-2 uppercase">
-                "KACHOW! High Performance Web Mechanic & Pixel Racer"
+                "You think you can beat me? <span class="theme-text-primary">KACHOW!</span>"
             </p>
+            <p class="font-heavy text-sm text-stone-400 mb-2">High Performance Web Mechanic & Pixel Racer</p>
             <p id="github-handle" class="font-pixel text-[10px] text-stone-400 mb-6">@Xicc29</p>
 
             <nav class="w-full flex flex-wrap justify-center gap-3 font-pixel text-[10px] md:text-xs">
