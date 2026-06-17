@@ -1,7 +1,7 @@
 {
-  "name": "harry-potter-portfolio",
+  "name": "aries-legaspi-portfolio",
   "version": "1.0.0",
-  "description": "A Harry Potter retro-themed developer portfolio",
+  "description": "Retro Cartoon Garage developer portfolio by Aries Legaspi",
   "scripts": {
     "dev": "npx serve .",
     "start": "npx serve ."
