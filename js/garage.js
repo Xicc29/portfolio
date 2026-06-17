@@ -202,6 +202,76 @@ function revTuningStats() {
   triggerGarageNotification(`Tuned chassis component! Current Diagnostic Level: ${currentTuningLevel}`);
 }
 
+const LOADER_STATUSES = [
+  "Cranking the starter motor...",
+  "Warming up the V8 pixels...",
+  "Inflating turbo tires...",
+  "Syncing GitHub pit lane...",
+  "Polishing chrome bumper...",
+  "Garage doors opening — peel out!",
+];
+
+const LOADER_MIN_MS = 2600;
+
+function initGarageLoader() {
+  const loader = document.getElementById("garage-loader");
+  if (!loader) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    loader.remove();
+    document.body.classList.remove("is-loading");
+    return;
+  }
+
+  const fill = document.getElementById("garage-loader-fill");
+  const status = document.getElementById("garage-loader-status");
+  const pct = document.getElementById("garage-loader-pct");
+  const start = performance.now();
+  let rafId = 0;
+
+  function updateProgress() {
+    const elapsed = performance.now() - start;
+    const progress = Math.min(96, (elapsed / LOADER_MIN_MS) * 100);
+    if (fill) fill.style.width = `${progress}%`;
+    if (pct) pct.textContent = `${Math.floor(progress)}%`;
+    const idx = Math.min(
+      LOADER_STATUSES.length - 1,
+      Math.floor((progress / 100) * LOADER_STATUSES.length)
+    );
+    if (status) status.textContent = LOADER_STATUSES[idx];
+    if (progress < 96) rafId = requestAnimationFrame(updateProgress);
+  }
+
+  rafId = requestAnimationFrame(updateProgress);
+
+  function finishLoader() {
+    cancelAnimationFrame(rafId);
+    if (fill) fill.style.width = "100%";
+    if (pct) pct.textContent = "100%";
+    if (status) status.textContent = LOADER_STATUSES[LOADER_STATUSES.length - 1];
+
+    playDashboardBeep(520, 0.06, "triangle", 0.03);
+    playDashboardBeep(700, 0.1, "square", 0.03);
+
+    loader.classList.add("garage-loader--exiting");
+    setTimeout(() => {
+      loader.classList.add("garage-loader--gone");
+      document.body.classList.remove("is-loading");
+      setTimeout(() => loader.remove(), 320);
+    }, 880);
+  }
+
+  Promise.all([
+    new Promise((resolve) => {
+      if (document.readyState === "complete") resolve();
+      else window.addEventListener("load", resolve, { once: true });
+    }),
+    new Promise((resolve) => setTimeout(resolve, LOADER_MIN_MS)),
+  ]).then(finishLoader);
+}
+
+initGarageLoader();
+
 document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", resizeExhaustCanvas);
   resizeExhaustCanvas();
