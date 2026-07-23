@@ -49,7 +49,7 @@ const FEATURED_PROJECTS = [
     name: "Retro Garage Portfolio",
     githubRepo: "portfolio",
     owner: "Xicc29",
-    updatedAt: "2026-06-16T08:11:48Z",
+    updatedAt: "2026-07-23T14:47:45Z",
     tag: "SHOWROOM BUILD",
     description: "Interactive developer portfolio with retro cartoon racing garage theme, arcade games, and live GitHub sync.",
     language: "JavaScript",
