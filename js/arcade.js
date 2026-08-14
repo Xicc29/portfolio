@@ -175,14 +175,16 @@ function updateHUD(meta) {
   }
 }
 
-function showOverlay(title, message, buttonText = "[ START ENGINE ]") {
+function showOverlay(title, message, buttonText) {
   const overlay = document.getElementById("game-overlay");
   if (!overlay) return;
+  const studio = document.documentElement.getAttribute("data-skin") === "studio";
+  const label = buttonText || (studio ? "Start" : "[ START ENGINE ]");
   overlay.innerHTML = `
     <h3 class="font-cartoon text-4xl text-amber-400 mb-2">${title}</h3>
     <p class="font-pixel text-[10px] text-stone-400 max-w-sm mb-6 leading-loose">${message}</p>
     <button onclick="startArcadeGame()" class="garage-border theme-bg-primary hover:theme-bg-accent text-black font-pixel text-xs px-6 py-3 transition uppercase tracking-widest">
-      ${buttonText}
+      ${label}
     </button>
   `;
   overlay.classList.remove("hidden");
@@ -200,12 +202,21 @@ function endGame(gameOverTitle, message) {
   if (gameScore > highScores[activeGameId]) {
     highScores[activeGameId] = gameScore;
     document.getElementById("arcade-high-score").textContent = String(gameScore).padStart(5, "0");
-    triggerGarageNotification(`NEW HIGH SCORE in ${ArcadeGames[activeGameId].meta.title}: ${gameScore} XP!`);
+    triggerGarageNotification(
+      document.documentElement.getAttribute("data-skin") === "studio"
+        ? `New high score in ${ArcadeGames[activeGameId].meta.title}: ${gameScore}`
+        : `NEW HIGH SCORE in ${ArcadeGames[activeGameId].meta.title}: ${gameScore} XP!`
+    );
   } else {
-    triggerGarageNotification(`${gameOverTitle} Final score: ${gameScore} XP.`);
+    triggerGarageNotification(
+      document.documentElement.getAttribute("data-skin") === "studio"
+        ? `${gameOverTitle} Score: ${gameScore}`
+        : `${gameOverTitle} Final score: ${gameScore} XP.`
+    );
   }
 
-  showOverlay(gameOverTitle, `${message} Score: <span class="text-white">${gameScore} XP</span>`, "[ RESTART ENGINE ]");
+  const studio = document.documentElement.getAttribute("data-skin") === "studio";
+  showOverlay(gameOverTitle, `${message} Score: <span class="text-white">${gameScore}${studio ? "" : " XP"}</span>`, studio ? "Play again" : "[ RESTART ENGINE ]");
 }
 
 function updateStats(val1, val2, progressPct) {
@@ -230,9 +241,10 @@ function selectArcadeGame(gameId) {
   setupGameCanvas();
   updateHUD(ArcadeGames[gameId].meta);
   ArcadeGames[gameId].reset();
+  const studio = document.documentElement.getAttribute("data-skin") === "studio";
   showOverlay(
-    "READY TO RACE?",
-    ArcadeGames[gameId].meta.startMessage || "Insert coin and start your engine!"
+    studio ? "Ready?" : "READY TO RACE?",
+    ArcadeGames[gameId].meta.startMessage || (studio ? "Pick a game and start." : "Insert coin and start your engine!")
   );
 }
 
@@ -245,7 +257,11 @@ function startArcadeGame() {
   const game = ArcadeGames[activeGameId];
   game.reset();
   game.start();
-  triggerGarageNotification(`${game.meta.title} — ENGINES ON!`);
+  triggerGarageNotification(
+    document.documentElement.getAttribute("data-skin") === "studio"
+      ? `${game.meta.title} — started`
+      : `${game.meta.title} — ENGINES ON!`
+  );
 }
 
 function runGameLoop(tickFn) {

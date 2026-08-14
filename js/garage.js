@@ -104,7 +104,12 @@ function changePaintTheme(themeName) {
   });
 
   playDashboardBeep(700, 0.2, "triangle");
-  triggerGarageNotification(`Applied Paint Job: ${themeName}! Ready to spin tires.`);
+  const studio = document.documentElement.getAttribute("data-skin") === "studio";
+  triggerGarageNotification(
+    studio
+      ? `Accent set to ${themeName}.`
+      : `Applied Paint Job: ${themeName}! Ready to spin tires.`
+  );
 }
 
 const exhCanvas = document.getElementById("exhaust-canvas");
@@ -199,19 +204,39 @@ function revTuningStats() {
   playDashboardBeep(440, 0.08);
   playDashboardBeep(554, 0.08);
   playDashboardBeep(659, 0.15);
-  triggerGarageNotification(`Tuned chassis component! Current Diagnostic Level: ${currentTuningLevel}`);
+  const studio = document.documentElement.getAttribute("data-skin") === "studio";
+  triggerGarageNotification(
+    studio
+      ? `Skills updated. Current level: ${currentTuningLevel}`
+      : `Tuned chassis component! Current Diagnostic Level: ${currentTuningLevel}`
+  );
 }
 
-const LOADER_STATUSES = [
-  "Cranking the starter motor...",
-  "Warming up the V8 pixels...",
-  "Inflating turbo tires...",
-  "Syncing GitHub pit lane...",
-  "Polishing chrome bumper...",
-  "Garage doors opening — peel out!",
-];
+const LOADER_STATUSES = {
+  garage: [
+    "Cranking the starter motor...",
+    "Warming up the V8 pixels...",
+    "Inflating turbo tires...",
+    "Syncing GitHub pit lane...",
+    "Polishing chrome bumper...",
+    "Garage doors opening — peel out!",
+  ],
+  studio: [
+    "Composing the layout…",
+    "Setting type…",
+    "Balancing contrast…",
+    "Syncing GitHub…",
+    "Refining the last 10%…",
+    "Ready.",
+  ],
+};
 
 const LOADER_MIN_MS = 2600;
+
+function getLoaderStatuses() {
+  const skin = document.documentElement.getAttribute("data-skin");
+  return LOADER_STATUSES[skin === "studio" ? "studio" : "garage"];
+}
 
 function initGarageLoader() {
   const loader = document.getElementById("garage-loader");
@@ -226,8 +251,11 @@ function initGarageLoader() {
   const fill = document.getElementById("garage-loader-fill");
   const status = document.getElementById("garage-loader-status");
   const pct = document.getElementById("garage-loader-pct");
+  const statuses = getLoaderStatuses();
   const start = performance.now();
   let rafId = 0;
+
+  if (status) status.textContent = statuses[0];
 
   function updateProgress() {
     const elapsed = performance.now() - start;
@@ -235,10 +263,10 @@ function initGarageLoader() {
     if (fill) fill.style.width = `${progress}%`;
     if (pct) pct.textContent = `${Math.floor(progress)}%`;
     const idx = Math.min(
-      LOADER_STATUSES.length - 1,
-      Math.floor((progress / 100) * LOADER_STATUSES.length)
+      statuses.length - 1,
+      Math.floor((progress / 100) * statuses.length)
     );
-    if (status) status.textContent = LOADER_STATUSES[idx];
+    if (status) status.textContent = statuses[idx];
     if (progress < 96) rafId = requestAnimationFrame(updateProgress);
   }
 
@@ -248,7 +276,7 @@ function initGarageLoader() {
     cancelAnimationFrame(rafId);
     if (fill) fill.style.width = "100%";
     if (pct) pct.textContent = "100%";
-    if (status) status.textContent = LOADER_STATUSES[LOADER_STATUSES.length - 1];
+    if (status) status.textContent = statuses[statuses.length - 1];
 
     playDashboardBeep(520, 0.06, "triangle", 0.03);
     playDashboardBeep(700, 0.1, "square", 0.03);
@@ -278,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
   animateExhaust();
 
   window.addEventListener("mousemove", (e) => {
+    if (document.documentElement.getAttribute("data-skin") === "studio") return;
     if (Math.random() < 0.3) exhaustPuffs.push(new ExhaustPuff(e.clientX, e.clientY));
   });
 

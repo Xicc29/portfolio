@@ -148,16 +148,29 @@ function renderGitHubStats(user, repos, projects) {
 
   const syncEl = document.getElementById("github-sync-note");
   if (syncEl) {
-    syncEl.textContent = `${projects.length} projects in showroom · synced ${new Date().toLocaleString()}`;
+    syncEl.textContent = isStudioSkin()
+      ? `${projects.length} projects · synced ${new Date().toLocaleString()}`
+      : `${projects.length} projects in showroom · synced ${new Date().toLocaleString()}`;
   }
 }
 
+function isStudioSkin() {
+  return document.documentElement.getAttribute("data-skin") === "studio";
+}
+
 function renderShowroom(projects) {
+  window.__lastProjects = projects;
   const grid = document.getElementById("showroom-grid");
   if (!grid) return;
 
   if (!projects.length) {
-    grid.innerHTML = `
+    grid.innerHTML = isStudioSkin()
+      ? `
+      <div class="col-span-full garage-border bg-stone-900 p-10 text-center">
+        <p class="font-pixel text-xs text-amber-400 mb-3">No projects yet</p>
+        <p class="font-heavy text-lg text-stone-300">Add work in js/projects.js to populate this grid.</p>
+      </div>`
+      : `
       <div class="col-span-full garage-border bg-stone-900 p-10 text-center shadow-[4px_4px_0_#000]">
         <p class="font-pixel text-xs text-amber-400 mb-3">🏁 EMPTY SHOWROOM</p>
         <p class="font-heavy text-lg text-stone-300">Add projects in js/projects.js to fill the showroom.</p>
@@ -166,10 +179,15 @@ function renderShowroom(projects) {
     return;
   }
 
-  grid.innerHTML = projects.map((project) => renderProjectCard(project)).join("");
+  grid.innerHTML = projects
+    .map((project, index) => renderProjectCard(project, index))
+    .join("");
+  if (typeof window.__bindStudioCards === "function") window.__bindStudioCards();
 }
 
-function renderProjectCard(project) {
+function renderProjectCard(project, index = 0) {
+  if (isStudioSkin()) return renderStudioProjectCard(project, index);
+
   const tag = escapeHtml(project.tag);
   const name = escapeHtml(project.name);
   const desc = escapeHtml(project.description);
@@ -201,7 +219,9 @@ function renderProjectCard(project) {
     ? `<a href="${escapeHtml(project.github)}" target="_blank" rel="noopener" class="block text-center garage-border py-2 bg-stone-950 text-white hover:text-amber-400 font-pixel text-[10px] transition">
         <i class="fa-solid fa-${project.private ? "lock" : "wrench"}"></i> ${project.private ? "VIEW PRIVATE REPO" : "START TEST DRIVE"}
       </a>`
-    : `<button onclick="triggerGarageNotification('Source code available on request — contact Aries!')" class="w-full text-center garage-border py-2 bg-stone-950 text-stone-400 hover:text-amber-400 font-pixel text-[10px] transition">
+    : project.demo
+      ? ""
+      : `<button onclick="triggerGarageNotification('Source code available on request — contact Aries!')" class="w-full text-center garage-border py-2 bg-stone-950 text-stone-400 hover:text-amber-400 font-pixel text-[10px] transition">
         <i class="fa-solid fa-lock"></i> REQUEST ACCESS
       </button>`;
 
@@ -228,6 +248,41 @@ function renderProjectCard(project) {
   `;
 }
 
+function studioProjectFilter(project) {
+  const hay = `${project.tag || ""} ${(project.tags || []).join(" ")}`.toUpperCase();
+  if (/WALLET|PAYMENT|ANALYTICS|FINTECH|GROWTH|INSPIRE/.test(hay)) return "fintech";
+  if (/ADMIN|BACKEND|GATEWAY|API/.test(hay)) return "platform";
+  return "product";
+}
+
+function renderStudioProjectCard(project, index = 0) {
+  const name = escapeHtml(project.name);
+  const tag = escapeHtml(project.tag || "");
+  const n = String(index + 1).padStart(2, "0");
+  const filter = studioProjectFilter(project);
+  const href = project.demo || project.github || "";
+  const year = project.updated ? String(new Date(project.updated).getFullYear()) : "";
+  const lang = project.language ? escapeHtml(project.language) : "";
+  const meta = [lang, year].filter(Boolean).join(" · ");
+  const action = project.demo ? "Live" : project.github ? (project.private ? "Private" : "Repo") : "";
+  const actionHtml = action
+    ? `<span class="studio-index-go">${action} <i class="fa-solid fa-arrow-up-right-from-square"></i></span>`
+    : `<span class="studio-index-go"></span>`;
+
+  const inner = `
+      <span class="studio-index">${n}</span>
+      <h3>${name}</h3>
+      <span class="studio-index-tag">${tag}</span>
+      <span class="studio-index-meta">${meta}</span>
+      ${actionHtml}
+  `;
+
+  if (href) {
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="studio-index-row" data-studio-filter="${filter}">${inner}</a>`;
+  }
+  return `<article class="studio-index-row" data-studio-filter="${filter}">${inner}</article>`;
+}
+
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
@@ -248,14 +303,30 @@ function escapeHtml(str) {
 }
 
 const EVENT_LABELS = {
-  PushEvent: { icon: "fa-code-commit", label: "Engine Push", color: "text-green-400" },
-  PullRequestEvent: { icon: "fa-code-merge", label: "Pit Merge", color: "text-cyan-400" },
-  CreateEvent: { icon: "fa-flag-checkered", label: "New Track", color: "text-amber-400" },
-  IssuesEvent: { icon: "fa-bug", label: "Bug Fix", color: "text-red-400" },
-  WatchEvent: { icon: "fa-star", label: "Starred", color: "text-yellow-400" },
-  MemberEvent: { icon: "fa-users", label: "Joined Crew", color: "text-purple-400" },
-  DeleteEvent: { icon: "fa-trash", label: "Branch Removed", color: "text-stone-400" },
+  garage: {
+    PushEvent: { icon: "fa-code-commit", label: "Engine Push", color: "text-green-400" },
+    PullRequestEvent: { icon: "fa-code-merge", label: "Pit Merge", color: "text-cyan-400" },
+    CreateEvent: { icon: "fa-flag-checkered", label: "New Track", color: "text-amber-400" },
+    IssuesEvent: { icon: "fa-bug", label: "Bug Fix", color: "text-red-400" },
+    WatchEvent: { icon: "fa-star", label: "Starred", color: "text-yellow-400" },
+    MemberEvent: { icon: "fa-users", label: "Joined Crew", color: "text-purple-400" },
+    DeleteEvent: { icon: "fa-trash", label: "Branch Removed", color: "text-stone-400" },
+  },
+  studio: {
+    PushEvent: { icon: "fa-code-commit", label: "Push", color: "text-green-400" },
+    PullRequestEvent: { icon: "fa-code-merge", label: "Pull request", color: "text-cyan-400" },
+    CreateEvent: { icon: "fa-plus", label: "Created", color: "text-amber-400" },
+    IssuesEvent: { icon: "fa-bug", label: "Issue", color: "text-red-400" },
+    WatchEvent: { icon: "fa-star", label: "Starred", color: "text-yellow-400" },
+    MemberEvent: { icon: "fa-users", label: "Joined", color: "text-purple-400" },
+    DeleteEvent: { icon: "fa-trash", label: "Deleted", color: "text-stone-400" },
+  },
 };
+
+function eventLabel(type) {
+  const pack = isStudioSkin() ? EVENT_LABELS.studio : EVENT_LABELS.garage;
+  return pack[type] || { icon: "fa-code", label: isStudioSkin() ? "Activity" : "Commit", color: "text-stone-400" };
+}
 
 function formatBranch(branch) {
   if (!branch) return "";
@@ -290,6 +361,8 @@ function mergeActivity(apiEvents) {
 }
 
 function renderContributions(projects, activities) {
+  window.__lastProjects = projects;
+  window.__lastActivities = activities;
   const orgs = [...new Set(projects.map((p) => p.owner))];
   const now = Date.now();
   const monthAgo = now - 30 * 86400000;
@@ -317,7 +390,9 @@ function renderContributions(projects, activities) {
 
   const syncEl = document.getElementById("contributions-sync-note");
   if (syncEl) {
-    syncEl.textContent = `Showing all ${activities.length} GitHub contributions · ${CONTRIBUTION_ROLE}`;
+    syncEl.textContent = isStudioSkin()
+      ? `${activities.length} GitHub events · ${CONTRIBUTION_ROLE}`
+      : `Showing all ${activities.length} GitHub contributions · ${CONTRIBUTION_ROLE}`;
   }
 }
 
@@ -417,8 +492,10 @@ function renderContributionHeatmap(activities) {
         .filter(Boolean)
         .join(" ");
       const label = isFuture
-        ? "Upcoming lap"
-        : `${formatHeatmapDate(key)}: ${count} commit${count === 1 ? "" : "s"}`;
+        ? isStudioSkin()
+          ? "Upcoming"
+          : "Upcoming lap"
+        : `${formatHeatmapDate(key)}: ${count} ${isStudioSkin() ? "contribution" : "commit"}${count === 1 ? "" : "s"}`;
       gridHtml += `<span class="${classes}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></span>`;
     }
     gridHtml += `</div>`;
@@ -454,7 +531,7 @@ function renderContributionFeed(activities) {
 
   feed.innerHTML = merged
     .map((e) => {
-      const meta = EVENT_LABELS[e.type] || { icon: "fa-wrench", label: "Commit", color: "text-stone-400" };
+      const meta = eventLabel(e.type);
       const when = formatRelativeDate(e.created_at);
       const repoShort = e.repo;
       const repoUrl = e.repoUrl || `https://github.com/${e.repo}`;
@@ -471,7 +548,7 @@ function renderContributionFeed(activities) {
             ${branchLine}
             <p class="font-pixel text-[8px] text-stone-500 mt-1">${when} · ${new Date(e.created_at).toLocaleDateString()}</p>
           </div>
-          ${repoUrl ? `<a href="${escapeHtml(repoUrl)}" target="_blank" rel="noopener" class="font-pixel text-[8px] text-amber-400 hover:underline shrink-0">VIEW</a>` : ""}
+          ${repoUrl ? `<a href="${escapeHtml(repoUrl)}" target="_blank" rel="noopener" class="font-pixel text-[8px] text-amber-400 hover:underline shrink-0">${isStudioSkin() ? "View" : "VIEW"}</a>` : ""}
         </div>
       `;
     })
@@ -487,6 +564,7 @@ function renderContributionBreakdown(projects, orgs, langCounts) {
     tagCounts[p.tag] = (tagCounts[p.tag] || 0) + 1;
   });
 
+  const studio = isStudioSkin();
   const orgHtml = orgs
     .map(
       (o) =>
@@ -498,7 +576,7 @@ function renderContributionBreakdown(projects, orgs, langCounts) {
     .sort((a, b) => b[1] - a[1])
     .map(
       ([lang, n]) =>
-        `<div class="flex justify-between bg-stone-950 border border-stone-800 px-3 py-2"><span>${escapeHtml(lang)}</span><span class="text-amber-400">${n} repos</span></div>`
+        `<div class="flex justify-between bg-stone-950 border border-stone-800 px-3 py-2"><span>${escapeHtml(lang)}</span><span class="text-amber-400">${n} ${studio ? "repos" : "repos"}</span></div>`
     )
     .join("");
 
@@ -513,16 +591,23 @@ function renderContributionBreakdown(projects, orgs, langCounts) {
 
   el.innerHTML = `
     <div class="bg-stone-900 border-2 border-black p-3">
-      <p class="text-amber-400 mb-2 text-[9px]">PIT TEAMS</p>
+      <p class="text-amber-400 mb-2 text-[9px]">${studio ? "TEAMS" : "PIT TEAMS"}</p>
       <div class="flex flex-wrap gap-1">${orgHtml}</div>
     </div>
     <div class="bg-stone-900 border-2 border-black p-3">
-      <p class="text-amber-400 mb-2 text-[9px]">FUEL TYPES</p>
+      <p class="text-amber-400 mb-2 text-[9px]">${studio ? "LANGUAGES" : "FUEL TYPES"}</p>
       <div class="space-y-1">${langHtml || "<p class='text-stone-500'>—</p>"}</div>
     </div>
     <div class="bg-stone-900 border-2 border-black p-3">
-      <p class="text-amber-400 mb-2 text-[9px]">BUILD TYPES</p>
+      <p class="text-amber-400 mb-2 text-[9px]">${studio ? "CATEGORIES" : "BUILD TYPES"}</p>
       <div class="space-y-1">${tagHtml}</div>
     </div>
   `;
 }
+
+window.__refreshPortfolioSkin = function () {
+  if (window.__lastProjects) renderShowroom(window.__lastProjects);
+  if (window.__lastProjects && window.__lastActivities) {
+    renderContributions(window.__lastProjects, window.__lastActivities);
+  }
+};

@@ -1,33 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-skin="garage">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aries Legaspi — Retro Cartoon Garage & Portfolio</title>
     <meta name="description" content="High-performance web mechanic portfolio by Aries Legaspi (@Xicc29)">
+    <script>
+      (function () {
+        try {
+          var skin = localStorage.getItem("aries-portfolio-skin");
+          if (skin === "studio") document.documentElement.setAttribute("data-skin", "studio");
+        } catch (e) {}
+      })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Press+Start+2P&family=VT323&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Lilita+One&family=Press+Start+2P&family=VT323&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/garage.css">
+    <link rel="stylesheet" href="css/studio.css">
 </head>
-<body class="selection:bg-amber-400 selection:text-black min-h-screen relative flex flex-col justify-between overflow-x-hidden pb-10 is-loading">
+<body id="top" class="selection:bg-amber-400 selection:text-black min-h-screen relative flex flex-col justify-between overflow-x-hidden pb-10 is-loading">
 
     <div id="garage-loader" class="garage-loader" role="status" aria-live="polite" aria-label="Loading portfolio">
         <div class="garage-loader-door garage-loader-door--top" aria-hidden="true"></div>
         <div class="garage-loader-door garage-loader-door--bottom" aria-hidden="true"></div>
         <div class="garage-loader-panel">
-            <div class="garage-loader-checkered" aria-hidden="true"></div>
-            <p class="font-pixel text-[9px] text-amber-400 tracking-widest mb-2">PIT CREW SYSTEM BOOT v2.6</p>
+            <div class="garage-loader-checkered skin-garage" aria-hidden="true"></div>
+            <p class="font-pixel text-[9px] text-amber-400 tracking-widest mb-2 skin-garage">PIT CREW SYSTEM BOOT v2.6</p>
+            <p class="studio-kicker skin-studio mb-3">Portfolio · 2026</p>
             <h2 class="font-cartoon text-3xl md:text-5xl text-white drop-shadow-[4px_4px_0_#000] mb-1">
-                LEGASPI <span class="theme-text-primary">GARAGE</span>
+                <span class="skin-garage">LEGASPI <span class="theme-text-primary">GARAGE</span></span>
+                <span class="skin-studio">Aries <em>Legaspi</em></span>
             </h2>
-            <p class="font-pixel text-[8px] text-stone-500 mb-4">@Xicc29 · Retro Speedway Edition</p>
-            <p id="garage-loader-quote" class="garage-loader-quote font-pixel text-[10px] md:text-xs text-amber-400 leading-relaxed mb-5">
+            <p class="font-pixel text-[8px] text-stone-500 mb-4 skin-garage">@Xicc29 · Retro Speedway Edition</p>
+            <p class="skin-studio text-zinc-400 text-sm mb-8 tracking-tight">Frontend Engineer &amp; UI/UX Designer</p>
+            <p id="garage-loader-quote" class="garage-loader-quote font-pixel text-[10px] md:text-xs text-amber-400 leading-relaxed mb-5 skin-garage">
                 "You think you can beat me?<br><span class="garage-loader-kachow theme-text-primary">KACHOW!</span>"
             </p>
-            <div class="garage-loader-car animate-engine-idle" aria-hidden="true">🏎️</div>
+            <div class="garage-loader-car animate-engine-idle skin-garage" aria-hidden="true">🏎️</div>
             <div class="garage-loader-bar" aria-hidden="true">
                 <div id="garage-loader-fill" class="garage-loader-fill"></div>
             </div>
@@ -39,20 +51,52 @@
     <div class="fixed inset-0 pointer-events-none z-0 opacity-10 tire-tracks"></div>
     <canvas id="exhaust-canvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
+    <div id="studio-chrome" class="skin-studio">
+        <div class="galaxy-nebula" aria-hidden="true"></div>
+        <canvas id="galaxy-canvas" class="galaxy-canvas" aria-hidden="true"></canvas>
+        <div id="studio-progress" class="studio-progress" aria-hidden="true"></div>
+        <div id="studio-cursor" class="studio-cursor" aria-hidden="true">
+            <span class="studio-cursor-dot"></span>
+            <span class="studio-cursor-ring"></span>
+        </div>
+        <nav id="studio-topbar" class="studio-topbar" aria-label="Studio navigation">
+            <a href="#top" class="studio-topbar-mark">Aries Legaspi</a>
+            <div class="studio-topbar-links">
+                <a href="#studio-featured" data-spy="studio-featured">Work</a>
+                <a href="#studio-about" data-spy="studio-about">About</a>
+                <a href="#studio-experience" data-spy="studio-experience">Experience</a>
+                <a href="#studio-contact">Contact</a>
+            </div>
+        </nav>
+    </div>
+
     <div id="garage-alert" class="hidden fixed bottom-6 right-6 z-[10001] max-w-sm font-pixel text-xs p-5 bg-[#ffb700] text-black border-4 border-black shadow-[6px_6px_0px_#000] animate-bounce">
         <div class="flex items-center justify-between mb-3">
-            <span class="font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> GARAGE RADAR</span>
+            <span class="font-bold flex items-center gap-2">
+                <span class="skin-garage"><i class="fa-solid fa-triangle-exclamation"></i> GARAGE RADAR</span>
+                <span class="skin-studio"><i class="fa-solid fa-bell"></i> Notice</span>
+            </span>
             <button onclick="dismissGarageAlert()" class="text-black hover:text-red-700 font-bold text-sm">✕</button>
         </div>
         <p id="garage-alert-text" class="leading-relaxed font-semibold">Tire pressure calibrated! Engine ready to spin.</p>
     </div>
 
-    <div class="fixed top-4 right-4 z-50 flex gap-2">
+    <div class="fixed top-4 right-4 z-50 flex gap-2 items-center">
+        <div class="skin-toggle" role="group" aria-label="Portfolio appearance">
+            <button type="button" class="skin-toggle-btn is-active" data-skin-set="garage" aria-pressed="true" title="Garage theme">
+                <i class="fa-solid fa-car-side"></i>
+                <span>Garage</span>
+            </button>
+            <button type="button" class="skin-toggle-btn" data-skin-set="studio" aria-pressed="false" title="Professional studio theme">
+                <i class="fa-solid fa-pen-nib"></i>
+                <span>Studio</span>
+            </button>
+        </div>
         <button id="sfx-toggle" onclick="toggleDashboardMute()" class="garage-border bg-black text-white hover:text-yellow-400 px-3 py-2 text-xs font-pixel flex items-center gap-2 transition-all hover:scale-105" title="Toggle Engine SFX">
             <i class="fa-solid fa-volume-high" id="sfx-icon"></i>
             <span class="hidden md:inline">AUDIO ON</span>
         </button>
-        <a href="#paint-shop-section" class="garage-border theme-bg-primary text-black px-3 py-2 text-xs font-pixel flex items-center gap-2 transition-all hover:scale-105" title="Customize Hot Rod Theme">
+        <a href="#paint-shop-section" class="skin-garage garage-border theme-bg-primary text-black px-3 py-2 text-xs font-pixel flex items-center gap-2 transition-all hover:scale-105" title="Customize Hot Rod Theme">
             <i class="fa-solid fa-palette"></i>
             <span class="hidden md:inline">PAINT SHOP</span>
         </a>
@@ -63,67 +107,219 @@
 
         <div class="bg-stone-900 border-x-4 border-b-4 border-black p-6 text-center flex flex-col items-center justify-center relative overflow-hidden shadow-2xl">
             <div class="w-32 h-20 mb-3 relative flex items-center justify-center animate-engine-idle" id="avatar-car-wrapper">
+                <span class="studio-orbit skin-studio" aria-hidden="true">
+                    <span class="studio-orbit-ring"></span>
+                    <span class="studio-orbit-ring studio-orbit-ring--slow"></span>
+                    <span class="studio-orbit-dot"></span>
+                </span>
                 <img id="github-avatar" src="" alt="Aries Legaspi" class="github-avatar hidden w-24 h-24 border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)]">
                 <span id="avatar-fallback" class="text-7xl drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
-                    <span id="car-avatar-emoji">🏎️</span>
+                    <span id="car-avatar-emoji" class="skin-garage">🏎️</span>
+                    <span class="skin-studio studio-monogram" aria-hidden="true">AL</span>
                 </span>
-                <div class="absolute -left-6 bottom-2 flex gap-1 animate-pulse">
+                <div class="absolute -left-6 bottom-2 flex gap-1 animate-pulse skin-garage">
                     <span class="w-2 h-2 bg-gray-500 rounded-full opacity-70"></span>
                     <span class="w-3 h-3 bg-gray-400 rounded-full opacity-50"></span>
                 </div>
             </div>
 
             <h1 class="font-cartoon text-5xl md:text-7xl lg:text-8xl tracking-wider text-white drop-shadow-[5px_5px_0px_#000000] mb-2">
-                ARIES LEGASPI'S <span class="theme-text-primary">GARAGE</span>
+                <span class="skin-garage">ARIES LEGASPI'S <span class="theme-text-primary">GARAGE</span></span>
+                <span class="skin-studio">Aries <em>Legaspi</em></span>
             </h1>
 
-            <p class="font-pixel text-xs md:text-sm tracking-wide text-amber-400 mb-2 uppercase">
+            <p class="font-pixel text-xs md:text-sm tracking-wide text-amber-400 mb-2 uppercase skin-garage">
                 "You think you can beat me? <span class="theme-text-primary">KACHOW!</span>"
             </p>
-            <p class="font-heavy text-sm text-stone-400 mb-2">High Performance Web Mechanic & Pixel Racer</p>
-            <p id="github-handle" class="font-pixel text-[10px] text-stone-400 mb-6">@Xicc29</p>
+            <p class="studio-kicker skin-studio">
+                <span class="studio-avail"><span class="studio-avail-dot"></span> Available for work</span>
+            </p>
+            <p class="font-heavy text-sm text-stone-400 mb-2 skin-garage">High Performance Web Mechanic & Pixel Racer</p>
+            <p class="studio-role skin-studio">Frontend Engineer &amp; UI/UX Designer</p>
+            <p class="studio-lede skin-studio">
+                I design and ship product interfaces — wallets, clinic operations, and admin systems — with a bias for hierarchy and the last 10% of craft.
+            </p>
+            <p id="github-handle" class="font-pixel text-[10px] text-stone-400 mb-6 skin-garage">@Xicc29</p>
+            <div class="studio-hero-meta skin-studio">
+                <span>Manila</span>
+                <span class="studio-meta-dot"></span>
+                <span data-studio-clock>—</span>
+                <span class="studio-meta-dot"></span>
+                <span>@Xicc29</span>
+            </div>
+            <div class="studio-hero-actions skin-studio">
+                <a href="#studio-featured" class="studio-btn-fill">View work</a>
+                <a href="#studio-contact" class="studio-btn-ghost">Get in touch</a>
+            </div>
 
-            <nav class="w-full flex flex-wrap justify-center gap-3 font-pixel text-[10px] md:text-xs">
-                <a href="#retro-piston-arcade" onclick="playDashboardBeep(520, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-gamepad"></i> RETRO RACER GAME
+            <nav class="w-full flex flex-wrap justify-center gap-3 font-pixel text-[10px] md:text-xs skin-garage">
+                <a href="#retro-piston-arcade" onclick="playDashboardBeep(520, 0.08)" class="skin-garage garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span>RETRO RACER GAME</span>
                 </a>
                 <a href="#paint-shop-section" onclick="playDashboardBeep(580, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-spray-can"></i> PAINT SHOP
+                    <i class="fa-solid fa-spray-can skin-garage"></i>
+                    <span class="skin-garage">PAINT SHOP</span>
+                    <span class="skin-studio">Palette</span>
                 </a>
                 <a href="#mechanic-credentials" onclick="playDashboardBeep(640, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-id-card"></i> CARDS & STATS
+                    <i class="fa-solid fa-id-card skin-garage"></i>
+                    <span class="skin-garage">CARDS & STATS</span>
+                    <span class="skin-studio">About</span>
                 </a>
                 <a href="#showroom-projects" onclick="playDashboardBeep(700, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-car-side"></i> SHOWROOM
+                    <i class="fa-solid fa-car-side skin-garage"></i>
+                    <span class="skin-garage">SHOWROOM</span>
+                    <span class="skin-studio">Work</span>
                 </a>
                 <a href="#pit-lane-contributions" onclick="playDashboardBeep(730, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-code-commit"></i> COMMITS
+                    <i class="fa-solid fa-code-commit skin-garage"></i>
+                    <span class="skin-garage">COMMITS</span>
+                    <span class="skin-studio">Activity</span>
                 </a>
                 <a href="#highway-timeline" onclick="playDashboardBeep(760, 0.08)" class="garage-border bg-stone-800 text-white hover:bg-stone-700 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-route"></i> CAREER HIGHWAY
+                    <i class="fa-solid fa-route skin-garage"></i>
+                    <span class="skin-garage">CAREER HIGHWAY</span>
+                    <span class="skin-studio">Experience</span>
                 </a>
-                <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(800, 0.08); triggerGarageNotification('Popping the hood on your official pit crew resume!')" class="garage-border theme-bg-accent text-black hover:opacity-90 px-4 py-2 flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-file-pdf"></i> RESUME
+                <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(800, 0.08); triggerGarageNotification(isStudio() ? 'Opening resume PDF.' : 'Popping the hood on your official pit crew resume!')" class="garage-border theme-bg-accent text-black hover:opacity-90 px-4 py-2 flex items-center gap-1.5 transition studio-cta">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span class="skin-garage">RESUME</span>
+                    <span class="skin-studio">Resume</span>
                 </a>
             </nav>
         </div>
         <div class="w-full h-4 checkered-pattern garage-border border-t-0"></div>
     </header>
 
+    <div class="studio-marquee skin-studio" aria-hidden="true">
+        <div class="studio-marquee-track">
+            <span>TypeScript</span><span>React</span><span>Next.js</span><span>Tailwind</span><span>UI/UX</span><span>PostgreSQL</span><span>Node</span><span>Figma</span><span>Fintech</span><span>Dashboards</span>
+            <span>TypeScript</span><span>React</span><span>Next.js</span><span>Tailwind</span><span>UI/UX</span><span>PostgreSQL</span><span>Node</span><span>Figma</span><span>Fintech</span><span>Dashboards</span>
+        </div>
+    </div>
+
     <main class="w-full max-w-6xl mx-auto px-4 flex-grow flex flex-col gap-12 relative z-30">
 
-        <section id="retro-piston-arcade" class="scroll-mt-6 w-full relative">
+        <section id="studio-services" class="skin-studio studio-services" aria-label="Capabilities">
+            <p class="studio-section-label">Capabilities</p>
+            <h2 class="studio-display">How I work</h2>
+            <div class="studio-services-grid">
+                <article class="studio-spot garage-border">
+                    <span class="studio-index">01</span>
+                    <h3>Interface</h3>
+                    <p>Hierarchy, type, and motion that stay readable when the product is dense — dashboards, wallets, and ops tools.</p>
+                </article>
+                <article class="studio-spot garage-border">
+                    <span class="studio-index">02</span>
+                    <h3>Product</h3>
+                    <p>Flows designed around real operators: payments, admin configuration, clinic booking, and the edges in between.</p>
+                </article>
+                <article class="studio-spot garage-border">
+                    <span class="studio-index">03</span>
+                    <h3>Engineering</h3>
+                    <p>TypeScript, React, and APIs shipped with collaborating teams — not mockups that stop at the handoff.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="studio-featured" class="skin-studio studio-featured scroll-mt-6" aria-label="Selected live work">
+            <div class="studio-section-head">
+                <p class="studio-section-label">Selected work</p>
+                <h2 class="studio-display">Shipped, in production.</h2>
+            </div>
+
+            <article class="studio-case-row">
+                <div class="studio-case-copy">
+                    <p class="studio-index">01 — Fintech</p>
+                    <h3>Inspire Wallet</h3>
+                    <p>Public landing I helped build as a frontend creator — product story, services, and download paths for a digital wallet.</p>
+                    <a href="https://www.inspirewallet.app/" target="_blank" rel="noopener" class="studio-case-go">inspirewallet.app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+                <a href="https://www.inspirewallet.app/" target="_blank" rel="noopener" class="studio-case-shot" aria-label="Open Inspire Wallet">
+                    <img src="assets/preview-inspire-wallet.jpg" alt="Inspire Wallet landing page" loading="lazy">
+                </a>
+            </article>
+
+            <article class="studio-case-row">
+                <div class="studio-case-copy">
+                    <p class="studio-index">02 — Healthcare</p>
+                    <h3>Brighter Dental Clinic</h3>
+                    <p>Operations app I built so clinic staff can book appointments and keep patient records without extra paperwork.</p>
+                    <a href="https://brighter-appointment2.web.app/login.html" target="_blank" rel="noopener" class="studio-case-go">Open live app <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+                <a href="https://brighter-appointment2.web.app/login.html" target="_blank" rel="noopener" class="studio-case-shot" aria-label="Open Brighter Dental Clinic app">
+                    <img src="assets/preview-brighter-dental.jpg" alt="Brighter Dental Clinic appointment app" loading="lazy">
+                </a>
+            </article>
+        </section>
+
+        <section id="studio-about" class="skin-studio studio-about scroll-mt-6" aria-label="About">
+            <p class="studio-section-label">About</p>
+            <div class="studio-about-grid">
+                <h2 class="studio-display">Frontend and UI/UX, with a product bias.</h2>
+                <div class="studio-about-copy">
+                    <p>I design and ship production interfaces across wallet apps, admin dashboards, and healthcare products — TypeScript, React, and systems that stay fast under real use.</p>
+                    <p>Clarity first. Then hierarchy, motion, and the last 10% of craft that makes an interface feel considered rather than assembled.</p>
+                    <dl class="studio-facts">
+                        <div>
+                            <dt>Based</dt>
+                            <dd>Manila</dd>
+                        </div>
+                        <div>
+                            <dt>Focus</dt>
+                            <dd>Frontend · UI/UX</dd>
+                        </div>
+                        <div>
+                            <dt>Stack</dt>
+                            <dd>TypeScript, React, Next.js</dd>
+                        </div>
+                    </dl>
+                    <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" class="studio-btn-ghost">Download résumé</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="studio-experience" class="skin-studio studio-experience scroll-mt-6" aria-label="Experience">
+            <p class="studio-section-label">Experience</p>
+            <h2 class="studio-display">Recent work.</h2>
+            <ol class="studio-exp">
+                <li>
+                    <span class="studio-exp-when">2024 — Present</span>
+                    <div class="studio-exp-body">
+                        <h3>Inspire Wallet</h3>
+                        <p class="studio-exp-role">Full-Stack Engineer · Fintech</p>
+                        <p>Frontend on the public site and the wider product — wallets, admin, APIs, and payment flows shipped with multiple teams.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="studio-exp-when">Independent</span>
+                    <div class="studio-exp-body">
+                        <h3>Product &amp; studio work</h3>
+                        <p class="studio-exp-role">Frontend Engineer &amp; UI/UX Designer</p>
+                        <p>End-to-end product work including Brighter Dental Clinic — appointments and patient records for clinic staff — plus this dual-theme portfolio.</p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section id="retro-piston-arcade" class="scroll-mt-6 w-full relative skin-garage">
             <div class="garage-border bg-stone-950 text-white p-6 font-terminal text-lg md:text-xl crt overflow-hidden relative shadow-[8px_8px_0px_#000]">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between border-b-4 border-dashed border-stone-800 pb-4 mb-4">
                     <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-flag-checkered text-4xl theme-text-primary animate-pulse"></i>
+                        <i class="fa-solid fa-flag-checkered text-4xl theme-text-primary animate-pulse skin-garage"></i>
+                        <i class="fa-solid fa-flask text-2xl theme-text-primary skin-studio"></i>
                         <div>
                             <p id="game-subtitle" class="font-pixel text-[9px] uppercase text-amber-500 tracking-widest">SYSTEM: DRIVER_CABIN_ARCADE_v1.0</p>
                             <h2 id="game-title" class="font-cartoon text-3xl tracking-wide text-white">Highway Heat Dodger</h2>
                         </div>
                     </div>
                     <div class="text-right text-xs font-pixel">
-                        <span class="text-amber-400">HIGH SCORE:</span> <span id="arcade-high-score">00250</span> XP
+                    <span class="text-amber-400">
+                        <span class="skin-garage">HIGH SCORE:</span>
+                        <span class="skin-studio">Best</span>
+                    </span> <span id="arcade-high-score">00250</span>
+                    <span class="skin-garage"> XP</span>
                     </div>
                 </div>
 
@@ -149,7 +345,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                     <div class="lg:col-span-4 bg-stone-900 border-4 border-black p-4 flex flex-col justify-between h-full">
                         <div>
-                            <h3 class="font-pixel text-xs text-amber-400 mb-3 border-b border-stone-800 pb-2">GAME CONTROLS</h3>
+                            <h3 class="font-pixel text-xs text-amber-400 mb-3 border-b border-stone-800 pb-2">
+                                <span class="skin-garage">GAME CONTROLS</span>
+                                <span class="skin-studio">Controls</span>
+                            </h3>
                             <p id="game-description" class="text-sm text-stone-300 leading-relaxed mb-4">
                                 Steer your hot rod down the strip! Dodge <strong class="text-orange-400">Traffic Cones 🚧</strong> and grab <strong class="text-red-400">Nitro Cans ⛽</strong>.
                             </p>
@@ -190,12 +389,19 @@
 
                     <div class="lg:col-span-8 relative">
                         <div id="game-overlay" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center text-center p-6 z-20">
-                            <h3 class="font-cartoon text-4xl text-amber-400 mb-2">READY TO RACE?</h3>
-                            <p class="font-pixel text-[10px] text-stone-400 max-w-sm mb-6 leading-loose">
+                            <h3 class="font-cartoon text-4xl text-amber-400 mb-2">
+                                <span class="skin-garage">READY TO RACE?</span>
+                                <span class="skin-studio">Interactive experiments</span>
+                            </h3>
+                            <p class="font-pixel text-[10px] text-stone-400 max-w-sm mb-6 leading-loose skin-garage">
                                 Pick a cabinet above, then start your virtual engine!
                             </p>
+                            <p class="font-pixel text-[10px] text-stone-400 max-w-sm mb-6 leading-loose skin-studio">
+                                Small canvas games I built for this site — a playground, not the product.
+                            </p>
                             <button onclick="startArcadeGame()" class="garage-border theme-bg-primary hover:theme-bg-accent text-black font-pixel text-xs px-6 py-3 transition uppercase tracking-widest">
-                                [ START CARTOON ENGINE ]
+                                <span class="skin-garage">[ START CARTOON ENGINE ]</span>
+                                <span class="skin-studio">Start</span>
                             </button>
                         </div>
                         <canvas id="piston-arcade-canvas" class="w-full h-80 bg-stone-900 border-4 border-black block shadow-inner cursor-pointer"></canvas>
@@ -204,83 +410,122 @@
             </div>
         </section>
 
-        <section id="paint-shop-section" class="scroll-mt-6">
+        <section id="paint-shop-section" class="scroll-mt-6 skin-garage">
             <div class="garage-border bg-[#1a1a24] p-6 relative shadow-[8px_8px_0px_#000]">
                 <div class="border-b-4 border-double border-stone-800 pb-4 mb-6">
-                    <p class="font-pixel text-xs tracking-widest text-amber-400 uppercase">CUSTOM DECAL WORKSHOP</p>
+                    <p class="font-pixel text-xs tracking-widest text-amber-400 uppercase skin-garage">CUSTOM DECAL WORKSHOP</p>
+                    <p class="studio-section-label skin-studio">Appearance</p>
                     <h3 class="font-cartoon text-4xl font-bold mt-1 tracking-tight text-white flex items-center gap-2">
-                        <i class="fa-solid fa-spray-can-sparkles theme-text-primary"></i> RETRO PAINT SHOP
+                        <i class="fa-solid fa-spray-can-sparkles theme-text-primary skin-garage"></i>
+                        <span class="skin-garage">RETRO PAINT SHOP</span>
+                        <span class="skin-studio">Accent palette</span>
                     </h3>
-                    <p class="text-stone-400 text-sm mt-1">Repaint your dynamic profile theme, HUD layout, and pixel racer styling instantly!</p>
+                    <p class="text-stone-400 text-sm mt-1 skin-garage">Repaint your dynamic profile theme, HUD layout, and pixel racer styling instantly!</p>
+                    <p class="text-stone-400 text-sm mt-1 skin-studio">A quiet set of accent colors. Studio keeps indigo by default — Garage still uses these as full paint jobs.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <button onclick="changePaintTheme('Lightning')" class="garage-border bg-stone-900 p-4 hover:bg-stone-800 transition duration-150 text-left flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <span class="font-pixel text-[9px] text-[#ff2a2a] font-bold">RED SPECS</span>
+                                <span class="font-pixel text-[9px] text-[#ff2a2a] font-bold">
+                                    <span class="skin-garage">RED SPECS</span>
+                                    <span class="skin-studio">Crimson</span>
+                                </span>
                                 <span class="text-xl">⚡</span>
                             </div>
-                            <h4 class="font-cartoon text-2xl text-white">LIGHTNING RED</h4>
+                            <h4 class="font-cartoon text-2xl text-white">
+                                <span class="skin-garage">LIGHTNING RED</span>
+                                <span class="skin-studio">Signal</span>
+                            </h4>
                         </div>
-                        <p class="text-xs text-stone-400 mt-2 font-mono">The absolute classic Piston Cup winner look.</p>
+                        <p class="text-xs text-stone-400 mt-2 font-mono skin-garage">The absolute classic Piston Cup winner look.</p>
+                        <p class="text-xs text-stone-400 mt-2 skin-studio">High-energy red for emphasis and CTAs.</p>
                     </button>
 
                     <button onclick="changePaintTheme('Dinoco')" class="garage-border bg-stone-900 p-4 hover:bg-stone-800 transition duration-150 text-left flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <span class="font-pixel text-[9px] text-[#00aaff] font-bold">BLUE SPECS</span>
+                                <span class="font-pixel text-[9px] text-[#00aaff] font-bold">
+                                    <span class="skin-garage">BLUE SPECS</span>
+                                    <span class="skin-studio">Azure</span>
+                                </span>
                                 <span class="text-xl">💎</span>
                             </div>
-                            <h4 class="font-cartoon text-2xl text-white">DINOCO BLUE</h4>
+                            <h4 class="font-cartoon text-2xl text-white">
+                                <span class="skin-garage">DINOCO BLUE</span>
+                                <span class="skin-studio">Horizon</span>
+                            </h4>
                         </div>
-                        <p class="text-xs text-stone-400 mt-2 font-mono">Premium retro octane for sleek developers.</p>
+                        <p class="text-xs text-stone-400 mt-2 font-mono skin-garage">Premium retro octane for sleek developers.</p>
+                        <p class="text-xs text-stone-400 mt-2 skin-studio">Cool blue for product and dashboard work.</p>
                     </button>
 
                     <button onclick="changePaintTheme('Lowrider')" class="garage-border bg-stone-900 p-4 hover:bg-stone-800 transition duration-150 text-left flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <span class="font-pixel text-[9px] text-[#2aff2a] font-bold">NEON SPECS</span>
+                                <span class="font-pixel text-[9px] text-[#2aff2a] font-bold">
+                                    <span class="skin-garage">NEON SPECS</span>
+                                    <span class="skin-studio">Verdant</span>
+                                </span>
                                 <span class="text-xl">🌴</span>
                             </div>
-                            <h4 class="font-cartoon text-2xl text-white">TOXIC NEON</h4>
+                            <h4 class="font-cartoon text-2xl text-white">
+                                <span class="skin-garage">TOXIC NEON</span>
+                                <span class="skin-studio">Grove</span>
+                            </h4>
                         </div>
-                        <p class="text-xs text-stone-400 mt-2 font-mono">Custom glowing green with street style.</p>
+                        <p class="text-xs text-stone-400 mt-2 font-mono skin-garage">Custom glowing green with street style.</p>
+                        <p class="text-xs text-stone-400 mt-2 skin-studio">Fresh green for growth and success states.</p>
                     </button>
 
                     <button onclick="changePaintTheme('Rusty')" class="garage-border bg-stone-900 p-4 hover:bg-stone-800 transition duration-150 text-left flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <span class="font-pixel text-[9px] text-[#ff8000] font-bold">RUST SPECS</span>
+                                <span class="font-pixel text-[9px] text-[#ff8000] font-bold">
+                                    <span class="skin-garage">RUST SPECS</span>
+                                    <span class="skin-studio">Ochre</span>
+                                </span>
                                 <span class="text-xl">🪝</span>
                             </div>
-                            <h4 class="font-cartoon text-2xl text-white">RUST-EZE</h4>
+                            <h4 class="font-cartoon text-2xl text-white">
+                                <span class="skin-garage">RUST-EZE</span>
+                                <span class="skin-studio">Ember</span>
+                            </h4>
                         </div>
-                        <p class="text-xs text-stone-400 mt-2 font-mono">Old reliable copper & rust backend armor.</p>
+                        <p class="text-xs text-stone-400 mt-2 font-mono skin-garage">Old reliable copper & rust backend armor.</p>
+                        <p class="text-xs text-stone-400 mt-2 skin-studio">Warm amber for craft and editorial detail.</p>
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="mechanic-credentials" class="scroll-mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section id="mechanic-credentials" class="scroll-mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 skin-garage">
             <div class="lg:col-span-5 bg-stone-900 garage-border p-6 flex flex-col justify-between relative shadow-[6px_6px_0_#000]">
                 <div>
                     <div class="border-b-4 border-dashed border-stone-800 pb-4 mb-4 flex justify-between items-center">
                         <div>
-                            <p class="font-pixel text-[9px] uppercase tracking-widest text-amber-400 font-bold">OFFICIAL MECHANIC LICENSE</p>
+                            <p class="font-pixel text-[9px] uppercase tracking-widest text-amber-400 font-bold skin-garage">OFFICIAL MECHANIC LICENSE</p>
+                            <p class="studio-section-label skin-studio">Profile</p>
                             <h3 id="mechanic-name" class="font-cartoon text-4xl text-white mt-1">Aries Legaspi</h3>
                             <p id="github-member" class="font-pixel text-[9px] text-stone-500 mt-1">Loading GitHub profile…</p>
                         </div>
-                        <span class="text-4xl text-amber-500 animate-pulse">🛠️</span>
+                        <span class="text-4xl text-amber-500 animate-pulse skin-garage">🛠️</span>
                     </div>
 
                     <div class="space-y-4 font-heavy text-base text-stone-300 leading-relaxed">
                         <p id="github-bio" class="hidden"></p>
-                        <p>
+                        <p class="skin-garage">
                             We build screaming-fast user interfaces utilizing highly optimized Javascript fuels, Tailwind aerodynamic spoilers, and modern compiler spark plugs.
                         </p>
-                        <p class="border-l-4 theme-border-accent pl-4 italic text-stone-400 bg-black/30 p-3 rounded">
+                        <p class="skin-studio">
+                            I design and ship production interfaces across wallet apps, admin dashboards, and healthcare products — TypeScript, React, and systems that stay fast under real use.
+                        </p>
+                        <p class="border-l-4 theme-border-accent pl-4 italic text-stone-400 bg-black/30 p-3 rounded skin-garage">
                             "Slow code gets left in the dust — only high-grade racing mechanics squeeze every drop of frames-per-second!"
+                        </p>
+                        <p class="border-l-4 theme-border-accent pl-4 italic text-stone-400 bg-black/30 p-3 rounded skin-studio">
+                            Clarity first. Then motion, hierarchy, and the last 10% of craft that makes an interface feel considered.
                         </p>
                     </div>
                 </div>
@@ -301,25 +546,32 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-gauge"></i> UI Performance</span>
-                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-wrench"></i> Full Stack Tuning</span>
-                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-bolt"></i> Speed Demon</span>
+                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-gauge skin-garage"></i> <span class="skin-garage">UI Performance</span><span class="skin-studio">UI Engineering</span></span>
+                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-wrench skin-garage"></i> <span class="skin-garage">Full Stack Tuning</span><span class="skin-studio">Full Stack</span></span>
+                        <span class="px-3 py-1 bg-stone-950 text-amber-400 text-xs font-pixel rounded border border-stone-800"><i class="fa-solid fa-bolt skin-garage"></i> <span class="skin-garage">Speed Demon</span><span class="skin-studio">UI/UX Design</span></span>
                     </div>
-                    <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(620, 0.1); triggerGarageNotification('Downloading official mechanic license — PDF resume!')" class="block text-center garage-border theme-bg-primary text-black hover:opacity-90 font-pixel text-[10px] py-3 transition">
-                        <i class="fa-solid fa-file-pdf"></i> DOWNLOAD PIT CREW RESUME (PDF)
+                    <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(620, 0.1); triggerGarageNotification(isStudio() ? 'Downloading resume PDF.' : 'Downloading official mechanic license — PDF resume!')" class="block text-center garage-border theme-bg-primary text-black hover:opacity-90 font-pixel text-[10px] py-3 transition">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span class="skin-garage"> DOWNLOAD PIT CREW RESUME (PDF)</span>
+                        <span class="skin-studio"> Download résumé</span>
                     </a>
                 </div>
             </div>
 
             <div class="lg:col-span-7 bg-stone-950 garage-border p-6 shadow-[6px_6px_0_#000]">
                 <div class="border-b-4 border-dashed border-stone-800 pb-3 mb-4 flex justify-between items-center">
-                    <h3 class="font-pixel text-xs tracking-wider text-amber-400">ENGINE DIAGNOSTICS & TUNING</h3>
+                    <h3 class="font-pixel text-xs tracking-wider text-amber-400">
+                        <span class="skin-garage">ENGINE DIAGNOSTICS & TUNING</span>
+                        <span class="skin-studio">Skills</span>
+                    </h3>
                     <div class="px-3 py-1 bg-stone-900 text-white text-[10px] font-pixel rounded border border-black animate-pulse">
-                        TUNING LEVEL: <span id="garage-tuning-level">88</span>
+                        <span class="skin-garage">TUNING LEVEL:</span>
+                        <span class="skin-studio">Level</span>
+                        <span id="garage-tuning-level">88</span>
                     </div>
                 </div>
 
-                <div class="mb-6 p-4 bg-stone-900 border-2 border-black rounded">
+                <div class="mb-6 p-4 bg-stone-900 border-2 border-black rounded skin-garage">
                     <div class="flex justify-between items-center mb-3">
                         <span class="font-pixel text-xs text-white"><i class="fa-solid fa-guitar text-[#ff2a2a]"></i> INTERACTIVE MOTOR REV SYNTH</span>
                         <span class="text-xs font-pixel text-stone-500" id="rpm-text">IDLE RPM</span>
@@ -339,7 +591,9 @@
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <span class="font-pixel text-[11px] flex items-center gap-2 text-stone-300">
-                                <i class="fa-solid fa-gauge-high theme-text-primary"></i> Front-End Aerodynamics (Tailwind/CSS)
+                                <i class="fa-solid fa-gauge-high theme-text-primary"></i>
+                                <span class="skin-garage">Front-End Aerodynamics (Tailwind/CSS)</span>
+                                <span class="skin-studio">Frontend · Tailwind / CSS</span>
                             </span>
                             <span class="font-pixel text-xs text-stone-400" id="stat-aero-val">96%</span>
                         </div>
@@ -350,7 +604,10 @@
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <span class="font-pixel text-[11px] flex items-center gap-2 text-stone-300">
-                                <i class="fa-solid fa-gas-pump theme-text-primary"></i> React Horsepower & Octane (Next/TS)
+                                <i class="fa-solid fa-gas-pump theme-text-primary skin-garage"></i>
+                                <i class="fa-brands fa-react theme-text-primary skin-studio"></i>
+                                <span class="skin-garage">React Horsepower & Octane (Next/TS)</span>
+                                <span class="skin-studio">React · Next.js / TypeScript</span>
                             </span>
                             <span class="font-pixel text-xs text-stone-400" id="stat-react-val">90%</span>
                         </div>
@@ -361,7 +618,10 @@
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <span class="font-pixel text-[11px] flex items-center gap-2 text-stone-300">
-                                <i class="fa-solid fa-oil-can theme-text-primary"></i> Database Engine Lubricant (SQL/PostgreSQL)
+                                <i class="fa-solid fa-oil-can theme-text-primary skin-garage"></i>
+                                <i class="fa-solid fa-database theme-text-primary skin-studio"></i>
+                                <span class="skin-garage">Database Engine Lubricant (SQL/PostgreSQL)</span>
+                                <span class="skin-studio">Data · SQL / PostgreSQL</span>
                             </span>
                             <span class="font-pixel text-xs text-stone-400" id="stat-db-val">83%</span>
                         </div>
@@ -372,9 +632,11 @@
                 </div>
 
                 <div class="mt-6 pt-4 border-t border-stone-800 flex justify-between items-center flex-wrap gap-4">
-                    <p class="font-heavy text-xs text-stone-400">Earn dynamic points in the arcade racing game above to level up stats.</p>
+                    <p class="font-heavy text-xs text-stone-400 skin-garage">Earn dynamic points in the arcade racing game above to level up stats.</p>
+                    <p class="font-heavy text-xs text-stone-400 skin-studio">Representative proficiency — continuously applied on production work.</p>
                     <button onclick="revTuningStats()" class="garage-border px-4 py-2 theme-bg-primary hover:theme-bg-accent text-black font-pixel text-[11px] transition-all hover:-translate-y-1 active:translate-y-0">
-                        ⚡ RETUNE CHASSIS (+XP)
+                        <span class="skin-garage">⚡ RETUNE CHASSIS (+XP)</span>
+                        <span class="skin-studio">Nudge the meters</span>
                     </button>
                 </div>
             </div>
@@ -382,11 +644,20 @@
 
         <section id="showroom-projects" class="scroll-mt-6">
             <div class="text-center mb-10">
+                <p class="studio-section-label skin-studio">Index</p>
                 <h2 class="font-cartoon text-5xl md:text-6xl tracking-widest text-white inline-block relative after:content-[''] after:block after:w-full after:h-2 after:bg-amber-400 after:mt-2">
-                    THE CHROME SHOWROOM
+                    <span class="skin-garage">THE CHROME SHOWROOM</span>
+                    <span class="skin-studio">All projects &amp; repos</span>
                 </h2>
-                <p class="font-heavy text-stone-400 mt-2 text-lg">Your builds, thesis work, and GitHub repos — tuned for the track</p>
+                <p class="font-heavy text-stone-400 mt-2 text-lg skin-garage">Your builds, thesis work, and GitHub repos — tuned for the track</p>
+                <p class="font-heavy text-stone-400 mt-2 text-lg skin-studio">Live products, Inspire Wallet surfaces, and every repository I ship on.</p>
                 <p id="github-sync-note" class="font-pixel text-[9px] text-stone-500 mt-2">Syncing with GitHub…</p>
+                <div class="studio-filters skin-studio" id="studio-filters">
+                    <button type="button" class="is-on" data-studio-filter-btn="all">All</button>
+                    <button type="button" data-studio-filter-btn="fintech">Fintech</button>
+                    <button type="button" data-studio-filter-btn="platform">Platform</button>
+                    <button type="button" data-studio-filter-btn="product">Product</button>
+                </div>
             </div>
 
             <div id="showroom-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -394,40 +665,64 @@
                     <p class="font-pixel text-xs text-amber-400 animate-pulse">🏁 Loading your projects into the showroom…</p>
                 </div>
             </div>
+            <p id="studio-filter-empty" class="hidden skin-studio studio-filter-empty">Nothing in this slice yet — try another filter.</p>
         </section>
 
-        <section id="pit-lane-contributions" class="scroll-mt-6">
+        <section id="pit-lane-contributions" class="scroll-mt-6 skin-garage">
             <div class="garage-border bg-stone-950 p-6 shadow-[8px_8px_0px_#000]">
                 <div class="text-center border-b-4 border-dashed border-stone-800 pb-4 mb-6">
-                    <p class="font-pixel text-[10px] tracking-widest text-amber-400">PIT CREW ACTIVITY MONITOR</p>
-                    <h2 class="font-cartoon text-4xl md:text-5xl text-white mt-1">PIT LANE COMMIT LOG</h2>
-                    <p class="font-heavy text-stone-400 text-sm mt-2">Live engineering contributions across Inspire Wallet & collaborator repos</p>
+                    <p class="font-pixel text-[10px] tracking-widest text-amber-400 skin-garage">PIT CREW ACTIVITY MONITOR</p>
+                    <p class="studio-section-label skin-studio">GitHub</p>
+                    <h2 class="font-cartoon text-4xl md:text-5xl text-white mt-1">
+                        <span class="skin-garage">PIT LANE COMMIT LOG</span>
+                        <span class="skin-studio">Activity</span>
+                    </h2>
+                    <p class="font-heavy text-stone-400 text-sm mt-2 skin-garage">Live engineering contributions across Inspire Wallet & collaborator repos</p>
+                    <p class="font-heavy text-stone-400 text-sm mt-2 skin-studio">Contributions across Inspire Wallet and collaborator repositories.</p>
                     <p id="contributions-sync-note" class="font-pixel text-[9px] text-stone-500 mt-2">Showing all 55 GitHub contributions · Inspire Wallet ecosystem</p>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8 text-center">
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">ACTIVE REPOS</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">ACTIVE REPOS</span>
+                            <span class="skin-studio">Repos</span>
+                        </span>
                         <span id="contrib-repos" class="contrib-stat-value text-amber-400">17</span>
                     </div>
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">PIT TEAMS</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">PIT TEAMS</span>
+                            <span class="skin-studio">Teams</span>
+                        </span>
                         <span id="contrib-orgs" class="contrib-stat-value text-amber-400">5</span>
                     </div>
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">TOTAL EVENTS</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">TOTAL EVENTS</span>
+                            <span class="skin-studio">Events</span>
+                        </span>
                         <span id="contrib-total" class="contrib-stat-value text-white">55</span>
                     </div>
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">ENGINE PUSHES</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">ENGINE PUSHES</span>
+                            <span class="skin-studio">Pushes</span>
+                        </span>
                         <span id="contrib-pushes" class="contrib-stat-value text-green-400">39</span>
                     </div>
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">HOT THIS MONTH</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">HOT THIS MONTH</span>
+                            <span class="skin-studio">This month</span>
+                        </span>
                         <span id="contrib-recent" class="contrib-stat-value text-green-400">8</span>
                     </div>
                     <div class="contrib-stat">
-                        <span class="contrib-stat-label">PRIMARY FUEL</span>
+                        <span class="contrib-stat-label">
+                            <span class="skin-garage">PRIMARY FUEL</span>
+                            <span class="skin-studio">Stack</span>
+                        </span>
                         <span id="contrib-stack" class="contrib-stat-value contrib-stat-value--lang text-cyan-400">TypeScript</span>
                     </div>
                 </div>
@@ -439,9 +734,13 @@
                             <div class="flex items-start justify-between gap-3 mb-4">
                                 <div>
                                     <h3 class="font-pixel text-xs text-amber-400 flex items-center gap-2">
-                                        <i class="fa-solid fa-road theme-text-primary"></i> TIRE TRACK HEATMAP
+                                        <i class="fa-solid fa-road theme-text-primary skin-garage"></i>
+                                        <i class="fa-solid fa-chart-simple theme-text-primary skin-studio"></i>
+                                        <span class="skin-garage">TIRE TRACK HEATMAP</span>
+                                        <span class="skin-studio">Contribution heatmap</span>
                                     </h3>
-                                    <p class="text-[10px] font-heavy text-stone-400 mt-1">52-week lap log — brighter tread = more commits</p>
+                                    <p class="text-[10px] font-heavy text-stone-400 mt-1 skin-garage">52-week lap log — brighter tread = more commits</p>
+                                    <p class="text-[10px] font-heavy text-stone-400 mt-1 skin-studio">52-week activity — brighter cells mean more commits</p>
                                 </div>
                                 <div class="heatmap-gauge shrink-0" aria-hidden="true">
                                     <span class="heatmap-gauge-needle"></span>
@@ -450,15 +749,24 @@
 
                             <div class="heatmap-stats grid grid-cols-3 gap-2 mb-4 font-pixel text-center">
                                 <div class="heatmap-stat">
-                                    <span class="heatmap-stat-label">TOTAL LAPS</span>
+                                    <span class="heatmap-stat-label">
+                                        <span class="skin-garage">TOTAL LAPS</span>
+                                        <span class="skin-studio">Total</span>
+                                    </span>
                                     <span id="heatmap-total" class="heatmap-stat-value text-amber-400">0</span>
                                 </div>
                                 <div class="heatmap-stat">
-                                    <span class="heatmap-stat-label">ACTIVE DAYS</span>
+                                    <span class="heatmap-stat-label">
+                                        <span class="skin-garage">ACTIVE DAYS</span>
+                                        <span class="skin-studio">Active</span>
+                                    </span>
                                     <span id="heatmap-active" class="heatmap-stat-value text-green-400">0</span>
                                 </div>
                                 <div class="heatmap-stat">
-                                    <span class="heatmap-stat-label">PEAK DAY</span>
+                                    <span class="heatmap-stat-label">
+                                        <span class="skin-garage">PEAK DAY</span>
+                                        <span class="skin-studio">Peak</span>
+                                    </span>
                                     <span id="heatmap-peak" class="heatmap-stat-value text-white">0</span>
                                 </div>
                             </div>
@@ -466,7 +774,8 @@
                             <div id="contribution-heatmap" class="heatmap-scroll-wrap"></div>
 
                             <div class="heatmap-legend mt-4">
-                                <span class="heatmap-legend-label">Idle</span>
+                                <span class="heatmap-legend-label skin-garage">Idle</span>
+                                <span class="heatmap-legend-label skin-studio">Less</span>
                                 <div class="heatmap-legend-track">
                                     <span class="contrib-cell contrib-l0"></span>
                                     <span class="contrib-cell contrib-l1"></span>
@@ -474,14 +783,18 @@
                                     <span class="contrib-cell contrib-l3"></span>
                                     <span class="contrib-cell contrib-l4"></span>
                                 </div>
-                                <span class="heatmap-legend-label">Full throttle</span>
+                                <span class="heatmap-legend-label skin-garage">Full throttle</span>
+                                <span class="heatmap-legend-label skin-studio">More</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-7 bg-stone-900 border-4 border-black p-4">
                         <h3 class="font-pixel text-xs text-amber-400 mb-3 flex items-center justify-between gap-2">
-                            <span><i class="fa-solid fa-list theme-text-primary"></i> ALL PIT STOPS</span>
+                            <span><i class="fa-solid fa-list theme-text-primary"></i>
+                                <span class="skin-garage"> ALL PIT STOPS</span>
+                                <span class="skin-studio"> Recent activity</span>
+                            </span>
                             <span id="contrib-feed-count" class="text-stone-500 text-[9px]">55 logged</span>
                         </h3>
                         <div id="contribution-feed" class="space-y-2 max-h-[32rem] overflow-y-auto pr-1"></div>
@@ -489,18 +802,25 @@
                 </div>
 
                 <div class="mt-6 pt-4 border-t border-stone-800">
-                    <h3 class="font-pixel text-xs text-amber-400 mb-3">CONTRIBUTION BREAKDOWN</h3>
+                    <h3 class="font-pixel text-xs text-amber-400 mb-3">
+                        <span class="skin-garage">CONTRIBUTION BREAKDOWN</span>
+                        <span class="skin-studio">Breakdown</span>
+                    </h3>
                     <div id="contrib-breakdown" class="grid grid-cols-1 md:grid-cols-3 gap-3 font-pixel text-[10px]"></div>
                 </div>
             </div>
         </section>
 
-        <section id="highway-timeline" class="scroll-mt-6 w-full relative">
+        <section id="highway-timeline" class="scroll-mt-6 w-full relative skin-garage">
             <div class="garage-border bg-stone-900 p-6 shadow-[8px_8px_0_#000] relative overflow-hidden">
                 <div class="text-center border-b-8 border-double border-stone-800 pb-4 mb-6">
-                    <p class="font-pixel text-[10px] tracking-widest text-amber-400">THE ROAD TO PISTON CUP GLORY</p>
-                    <h2 class="font-cartoon text-4xl md:text-5xl lg:text-6xl text-white mt-1">THE CAREER HIGHWAY</h2>
-                    <div class="flex justify-between items-center text-[9px] font-pixel border-t border-stone-800 mt-2 pt-2 text-stone-400">
+                    <p class="font-pixel text-[10px] tracking-widest text-amber-400 skin-garage">THE ROAD TO PISTON CUP GLORY</p>
+                    <p class="studio-section-label skin-studio">Experience</p>
+                    <h2 class="font-cartoon text-4xl md:text-5xl lg:text-6xl text-white mt-1">
+                        <span class="skin-garage">THE CAREER HIGHWAY</span>
+                        <span class="skin-studio">Experience</span>
+                    </h2>
+                    <div class="flex justify-between items-center text-[9px] font-pixel border-t border-stone-800 mt-2 pt-2 text-stone-400 skin-garage">
                         <span>ROUTE CODE-99</span>
                         <span class="animate-pulse theme-text-primary">🟢 LIVE ENGINES COMMITTED</span>
                         <span>TOLL: 15 WRENCHES</span>
@@ -509,34 +829,60 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-heavy text-stone-300">
                     <div class="border-b lg:border-b-0 lg:border-r border-dashed border-stone-800 pb-6 lg:pb-0 lg:pr-8">
-                        <div class="mb-4">
+                        <div class="mb-4 skin-garage">
                             <span class="font-pixel text-[9px] theme-bg-primary text-black font-bold px-2 py-1 tracking-wider">MILE 50,000 (2024 - PRESENT)</span>
                             <h3 class="font-cartoon text-3xl text-white mt-2">RADIATOR SPRINGS DIGITAL</h3>
                             <p class="italic text-amber-400 text-sm">Lead Aerodynamicist & Principal Architect</p>
                         </div>
-                        <p class="leading-relaxed mb-4 text-sm">
+                        <div class="mb-4 skin-studio">
+                            <span class="font-pixel text-[9px] theme-bg-primary text-black font-bold px-2 py-1 tracking-wider">2024 — Present</span>
+                            <h3 class="font-cartoon text-3xl text-white mt-2">Inspire Wallet</h3>
+                            <p class="italic text-amber-400 text-sm">Full-Stack Engineer · Fintech</p>
+                        </div>
+                        <p class="leading-relaxed mb-4 text-sm skin-garage">
                             Hired to turbocharge global web systems. Oversaw front-end asset refactoring, improving payload load-speeds by <strong class="text-white">65%</strong> through advanced bundle stripping pit passes.
                         </p>
-                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 font-mono">
+                        <p class="leading-relaxed mb-4 text-sm skin-studio">
+                            Frontend on the public Inspire Wallet site and the wider product — wallets, admin, APIs, and payment flows shipped with multiple teams.
+                        </p>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 font-mono skin-garage">
                             <li>Rebuilt the custom client-facing tuning configurator application.</li>
                             <li>Defeated major performance bottlenecks on rendering roads.</li>
                             <li>Tuned cross-browser mechanics supporting millions of mobile device drivers.</li>
                         </ul>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 skin-studio">
+                            <li>Frontend creator on the <a href="https://www.inspirewallet.app/" target="_blank" rel="noopener" class="text-indigo-300 hover:text-white underline underline-offset-2">Inspire Wallet landing page</a>.</li>
+                            <li>Shipped wallet, admin, and growth surfaces used by internal ops and end users.</li>
+                            <li>Integrated payment gateways and backend services across collaborator repos.</li>
+                        </ul>
                     </div>
 
                     <div>
-                        <div class="mb-4">
+                        <div class="mb-4 skin-garage">
                             <span class="font-pixel text-[9px] theme-bg-primary text-black font-bold px-2 py-1 tracking-wider">MILE 25,000 (2021 - 2024)</span>
                             <h3 class="font-cartoon text-3xl text-white mt-2">DINOCO DEV LABS</h3>
                             <p class="italic text-amber-400 text-sm">Automated Chassis & Test Driver</p>
                         </div>
-                        <p class="leading-relaxed mb-4 text-sm">
+                        <div class="mb-4 skin-studio">
+                            <span class="font-pixel text-[9px] theme-bg-primary text-black font-bold px-2 py-1 tracking-wider">Independent · Product</span>
+                            <h3 class="font-cartoon text-3xl text-white mt-2">Product &amp; studio work</h3>
+                            <p class="italic text-amber-400 text-sm">Frontend Engineer &amp; UI/UX Designer</p>
+                        </div>
+                        <p class="leading-relaxed mb-4 text-sm skin-garage">
                             Constructed scalable RESTful oil gateways and responsive user cabins. Kept code execution error-free, optimizing core API endpoints by decreasing database query delays.
                         </p>
-                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 font-mono">
+                        <p class="leading-relaxed mb-4 text-sm skin-studio">
+                            End-to-end product work including Brighter Dental Clinic — appointments and patient records for clinic staff — plus this dual-theme portfolio as a study in interface personality.
+                        </p>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 font-mono skin-garage">
                             <li>Orchestrated responsive dashboard layouts containing live gauge components.</li>
                             <li>Engineered localized asset processing, reducing RAM engine drag by 40%.</li>
                             <li>Shipped fully containerized application chasses with zero highway incidents.</li>
+                        </ul>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-stone-400 skin-studio">
+                            <li>Built the live clinic app for booking and patient records: <a href="https://brighter-appointment2.web.app/login.html" target="_blank" rel="noopener" class="text-indigo-300 hover:text-white underline underline-offset-2">Brighter Dental Clinic</a>.</li>
+                            <li>Crafted interaction, visual hierarchy, and motion for client-facing products.</li>
+                            <li>Delivered responsive layouts that hold up from mobile ops to desktop admin.</li>
                         </ul>
                     </div>
                 </div>
@@ -545,29 +891,52 @@
 
     </main>
 
-    <footer class="w-full max-w-6xl mx-auto px-4 mt-12 relative z-30">
+    <section id="studio-contact" class="skin-studio studio-contact">
+        <div class="studio-contact-inner">
+            <p class="studio-section-label">Contact</p>
+            <h2 class="studio-display">Let’s talk.</h2>
+            <p class="studio-contact-note">Manila · usually replies within a day</p>
+            <a href="mailto:legaspiariesdianne@gmail.com" class="studio-email">legaspiariesdianne@gmail.com</a>
+            <div class="studio-contact-actions">
+                <button type="button" id="studio-copy-email" class="studio-btn-fill">Copy email</button>
+                <a href="https://www.linkedin.com/in/aries-dianne-legaspi-41614837a" target="_blank" rel="noopener" class="studio-btn-ghost">LinkedIn</a>
+                <a href="https://github.com/Xicc29" target="_blank" rel="noopener" class="studio-btn-ghost">GitHub</a>
+                <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" class="studio-btn-ghost">Résumé</a>
+            </div>
+            <p class="studio-colophon">© 2026 Aries Legaspi</p>
+        </div>
+    </section>
+
+    <footer class="w-full max-w-6xl mx-auto px-4 mt-12 relative z-30 skin-garage">
         <div class="w-full h-4 checkered-pattern garage-border border-b-0"></div>
         <div class="bg-stone-900 border-x-4 border-b-4 border-black p-6 text-center shadow-2xl relative">
-            <h3 class="font-cartoon text-4xl text-white mb-2">MISCHIEF & TIRES MANAGED</h3>
-            <p class="font-pixel text-[9px] text-amber-400 mb-6">ARIES LEGASPI GARAGE INC. // YEAR 2026 // RETRO SPEEDWAY EDITION</p>
+            <h3 class="font-cartoon text-4xl text-white mb-2">
+                <span class="skin-garage">MISCHIEF & TIRES MANAGED</span>
+                <span class="skin-studio">Let’s work</span>
+            </h3>
+            <p class="font-pixel text-[9px] text-amber-400 mb-6 skin-garage">ARIES LEGASPI GARAGE INC. // YEAR 2026 // RETRO SPEEDWAY EDITION</p>
+            <p class="font-pixel text-[9px] text-amber-400 mb-6 skin-studio">Aries Legaspi · Frontend Engineer &amp; UI/UX Designer · 2026</p>
 
             <div class="flex justify-center gap-6 mb-6 text-3xl">
-                <a href="https://github.com/Xicc29" target="_blank" rel="noopener" onclick="playDashboardBeep(440,0.1); triggerGarageNotification('Checking in on local GitHub Pit Lane!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="GitHub">
+                <a href="https://github.com/Xicc29" target="_blank" rel="noopener" onclick="playDashboardBeep(440,0.1); triggerGarageNotification(isStudio() ? 'Opening GitHub.' : 'Checking in on local GitHub Pit Lane!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="GitHub">
                     <i class="fa-brands fa-github animate-bounce"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/aries-dianne-legaspi-41614837a" target="_blank" rel="noopener" onclick="playDashboardBeep(490,0.1); triggerGarageNotification('Linking minds via LinkedIn Speedway!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="LinkedIn">
+                <a href="https://www.linkedin.com/in/aries-dianne-legaspi-41614837a" target="_blank" rel="noopener" onclick="playDashboardBeep(490,0.1); triggerGarageNotification(isStudio() ? 'Opening LinkedIn.' : 'Linking minds via LinkedIn Speedway!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="LinkedIn">
                     <i class="fa-brands fa-linkedin"></i>
                 </a>
-                <a href="mailto:legaspiariesdianne@gmail.com" onclick="playDashboardBeep(540,0.1); triggerGarageNotification('Deploying nitro express to Dispatch Pitstop!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="legaspiariesdianne@gmail.com">
+                <a href="mailto:legaspiariesdianne@gmail.com" onclick="playDashboardBeep(540,0.1); triggerGarageNotification(isStudio() ? 'Opening mail.' : 'Deploying nitro express to Dispatch Pitstop!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="legaspiariesdianne@gmail.com">
                     <i class="fa-solid fa-envelope"></i>
                 </a>
-                <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(590,0.1); triggerGarageNotification('Opening your pit crew resume PDF!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="Download Resume">
+                <a href="assets/legaspi-resume.pdf" target="_blank" rel="noopener" download="Aries-Legaspi-Resume.pdf" onclick="playDashboardBeep(590,0.1); triggerGarageNotification(isStudio() ? 'Opening résumé.' : 'Opening your pit crew resume PDF!')" class="hover:scale-110 hover:text-amber-400 text-white transition-all" title="Download Resume">
                     <i class="fa-solid fa-file-pdf"></i>
                 </a>
             </div>
 
-            <p class="font-heavy text-stone-400 text-sm max-w-lg mx-auto leading-relaxed">
+            <p class="font-heavy text-stone-400 text-sm max-w-lg mx-auto leading-relaxed skin-garage">
                 Thank you for steering through this high-performance garage space! May your fuel tanks remain filled and your compilers operate at top horsepower.
+            </p>
+            <p class="font-heavy text-stone-400 text-sm max-w-lg mx-auto leading-relaxed skin-studio">
+                Open to product, design-engineering, and frontend roles. Say hello — GitHub, LinkedIn, or email.
             </p>
         </div>
     </footer>
@@ -577,5 +946,7 @@
     <script src="js/garage.js"></script>
     <script src="js/arcade.js"></script>
     <script src="js/github.js"></script>
+    <script src="js/skin.js"></script>
+    <script src="js/studio.js"></script>
 </body>
 </html>
